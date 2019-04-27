@@ -3,9 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+var flash = require('connect-flash');
 const cookieSession = require('cookie-session');
 const keys = require('./server/config/keys');
 const authRoutes = require('./server/routes/authRoutes');
+const todoRoutes = require('./server/routes/todoRoutes');
 
 
 //Connection to the DB
@@ -22,6 +24,7 @@ const app = express();
 
 //Middleware
 app.use(bodyParser.json());
+app.use(flash());
 app.use(
     cookieSession({
         maxAge: 30 * 24 * 60 * 60 * 1000, //30 days
@@ -30,10 +33,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-require('./server/services/authGoogle');
-
+require('./server/services/authentication');
 //Routing 
 app.use('/auth',authRoutes);
+app.use('/todo',todoRoutes);
 
 
 
