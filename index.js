@@ -38,6 +38,27 @@ require('./server/services/authentication');
 app.use('/auth',authRoutes);
 app.use('/todo',todoRoutes);
 
+//To be deleted
+app.get('/', (req,res) => {
+    res.send({username: req.user.username, names: req.user.names, lastName: req.user.lastName});
+});
+
+
+//Static Routes
+if (process.env.NODE_ENV === 'production'){
+    //Express will serve up production assets
+    //like our main.js or main.css
+    app.use(express.static('client/build'));
+  
+    //Express will serve up the index.html file 
+    //if doesn't recognize the route
+    const path = require('path');
+    app.get('*', (req,res) => {
+      res.sendFile(path.resolve(__dirname,'client','build','index.html'));
+    });
+  
+  
+  }
 
 
 // http://localhost:5000
