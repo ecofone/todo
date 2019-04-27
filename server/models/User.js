@@ -28,7 +28,7 @@ UserSchema.methods.verifyPassword = function(password, callback){
 
 UserSchema.pre('save', function(next) {
     // Check if document is new or a new password has been set
-    if (this.isNew || this.isModified('password')) {
+    if ((this.isNew || this.isModified('password'))&& this.authProvider === 'Local')  {
         // Saving reference to this because of changing scopes
         const document = this;
         bcrypt.hash(document.password, saltRounds, function(err, hashedPassword) {
