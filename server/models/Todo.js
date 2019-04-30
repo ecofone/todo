@@ -14,6 +14,7 @@ const TodoSchema = new Schema({
 });
 
 
+//------------------------Middleware--------------------
 TodoSchema.pre('save', function(next) {
     // Check if AssignedTo is null, in that case assigns user who created
     if (this.isNew && !this.assignedTo) {
@@ -23,6 +24,20 @@ TodoSchema.pre('save', function(next) {
     next();
 });
 
+//------------------------Statics Methods--------------------
+//get All Todos 
+TodoSchema.statics.getAllTodos = function () { 
+    return Todo.find().populate('createdBy', { email: 1, names: 1, lastName:1 })
+                         .populate('assignedTo', { email: 1, names: 1, lastName:1 });
+};
+
+//Get one TODO populating with Users Data
+TodoSchema.statics.getTodo = function (todoID) { 
+    return Todo.findById(todoID).populate('createdBy', { email: 1, names: 1, lastName:1 })
+                                .populate('assignedTo', { email: 1, names: 1, lastName:1 });
+}
+
+//------------------------Instance Methods--------------------
 //Update Todo Fields
 TodoSchema.methods.updateFields = function(modifiedTodo){
     this.name = modifiedTodo.name;
@@ -31,7 +46,6 @@ TodoSchema.methods.updateFields = function(modifiedTodo){
     this.priority = modifiedTodo.priority;
     this.assignedTo = modifiedTodo.assignedTo;
   }
-
 
 //Associate Schema to the Model (Collection)
 const Todo = mongoose.model('Todo', TodoSchema);

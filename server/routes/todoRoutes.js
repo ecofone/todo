@@ -7,14 +7,12 @@ const requireLogin = require('../middlewares/requireLogin');
 //Get one Todo
 router.get('/:todoID', requireLogin, async (req,res) => {
     try {
-        var todo = await Todo.findById(req.params.todoID)
-                                .populate('createdBy', { email: 1, names: 1, lastName:1 })
-                                .populate('assignedTo', { email: 1, names: 1, lastName:1 });
+        var todo = await Todo.getTodo(req.params.todoID);
         if (todo){
             res.send(todo);
         }
         else {
-            res.status(404).send({msg:"Todo do not Exist"});
+            res.status(404).send({msg:"Todo does not Exist"});
         }
     } catch (err) {
         res.status(422).send(err);
@@ -24,9 +22,7 @@ router.get('/:todoID', requireLogin, async (req,res) => {
 //Get All Todos
 router.get('/', requireLogin, async (req,res) => {
     try {
-        var todos = await Todo.find()
-                                .populate('createdBy', { email: 1, names: 1, lastName:1 })
-                                .populate('assignedTo', { email: 1, names: 1, lastName:1 });
+        var todos = await Todo.getAllTodos();
         res.send(todos);
     } catch (err) {
         res.status(422).send(err);

@@ -1,9 +1,9 @@
+//authRoutes: Authentication Routes
 var express = require('express')
 var router = express.Router()
 const passport = require('passport');
 const User = require('../models/User');
 const requireLogin = require('../middlewares/requireLogin');
-
 
 
 //Create a new User
@@ -14,13 +14,13 @@ router.post('/create', async (req,res) => {
 
 //Get all Users
 router.get('/users', async (req,res) => {
-    const users = await User.find();
+    const users = await User.getAllUsers();
     res.send(users);
 });
 
 //Get current user profile
 router.get('/current_user', requireLogin, (req, res) => {
-    res.send(req.user);
+    res.send(req.user.getUserData());
 });
 
 //Logout current user

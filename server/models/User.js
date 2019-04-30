@@ -15,6 +15,14 @@ const UserSchema = new Schema({
     lastName: String
 });
 
+//------------------------Statics Methods--------------------
+//Get Info of all Users
+UserSchema.statics.getAllUsers = function(){
+  return User.find().select({username:1, email: 1, names: 1, lastName: 1});
+};
+
+
+//------------------------Instance Methods--------------------
 //Validate password
 UserSchema.methods.verifyPassword = function(password, callback){
     bcrypt.compare(password, this.password, function(err, same) {
@@ -24,7 +32,12 @@ UserSchema.methods.verifyPassword = function(password, callback){
         callback(err, same);
       }
     });
-  }
+  };
+
+//Get Info of current user
+UserSchema.methods.getUserData = function(){
+  return {username: this.username, email: this.email, names: this.names, lastName: this.lastName};
+};
 
 UserSchema.pre('save', function(next) {
     // Check if document is new or a new password has been set
