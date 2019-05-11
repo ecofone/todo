@@ -1,5 +1,6 @@
 //User.js: User Model
 const mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 const {Schema} = mongoose;
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -7,20 +8,21 @@ const saltRounds = 10;
 //Schema of the users' collections
 const UserSchema = new Schema({
     googleId: String,
-    username: String,
-    password: String,
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true},
     authProvider: String,
-    email: String,
-    names: String,
-    lastName: String
+    email: { type: String, required: true, unique: true },
+    names: { type: String, required: true },
+    lastName: { type: String, required: true },
 });
+
+UserSchema.plugin(uniqueValidator);
 
 //------------------------Statics Methods--------------------
 //Get Info of all Users
 UserSchema.statics.getAllUsers = function(){
   return User.find().select({username:1, email: 1, names: 1, lastName: 1});
 };
-
 
 //------------------------Instance Methods--------------------
 //Validate password

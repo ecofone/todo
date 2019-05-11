@@ -22,7 +22,7 @@ router.get('/:todoID', requireLogin, async (req,res) => {
 //Get All Todos
 router.get('/', requireLogin, async (req,res) => {
     try {
-        var todos = await Todo.getAllTodos();
+        var todos = await Todo.getAllTodosOfUser(req.user);
         res.send(todos);
     } catch (err) {
         res.status(422).send(err);

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 var flash = require('connect-flash');
 const cookieSession = require('cookie-session');
+var cookieParser = require('cookie-parser')
 const db = require('./server/services/database');
 const authRoutes = require('./server/routes/authRoutes');
 const todoRoutes = require('./server/routes/todoRoutes');
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 //Middleware
+app.use(cookieParser())
 app.use(bodyParser.json());
 app.use(flash());
 app.use(
@@ -31,12 +33,12 @@ app.use(passport.session());
 require('./server/services/authentication');
 
 //Routing 
-app.use('/api/auth',authRoutes);
+app.use('/auth',authRoutes);
 app.use('/api/todo',todoRoutes);
 
 //To be deleted
 app.get('/', (req,res) => {
-    res.send({username: req.user.username, names: req.user.names, lastName: req.user.lastName});
+    res.send("Root");
 });
 
 

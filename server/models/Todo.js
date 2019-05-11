@@ -31,6 +31,12 @@ TodoSchema.statics.getAllTodos = function () {
                          .populate('assignedTo', { email: 1, names: 1, lastName:1 });
 };
 
+//get All Todos of the user 
+TodoSchema.statics.getAllTodosOfUser = function (user) { 
+    return Todo.find({createdBy: user.id}).populate('createdBy', { email: 1, names: 1, lastName:1 })
+                         .populate('assignedTo', { email: 1, names: 1, lastName:1 });
+};
+
 //Get one TODO populating with Users Data
 TodoSchema.statics.getTodo = function (todoID) { 
     return Todo.findById(todoID).populate('createdBy', { email: 1, names: 1, lastName:1 })

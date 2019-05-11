@@ -27,7 +27,9 @@ passport.deserializeUser((id, done) => {
 
 //Local User and password authentication
 passport.use(new LocalStrategy(
-    { passReqToCallback : true} ,
+    {   passReqToCallback : true,
+        proxy: true
+    } ,
     async (req, username, password, done) => {
         try {
             const user = await User.findOne({ username: username });
@@ -68,7 +70,7 @@ passport.use(
                         }).save();
                 }
                 return done(null, user);
-            } catch (err) { return done(err) }
+            } catch (err) { conssole.log("Google Strategy Error: ", err); return done(err) }
         }   
     )
 );

@@ -8,8 +8,27 @@ const requireLogin = require('../middlewares/requireLogin');
 
 //Create a new User
 router.post('/create', async (req,res) => {
-    const user = await new User({...req.body, authProvider: 'Local'}).save();
-    res.send("User Created!");
+    try{
+        const user = await new User({...req.body, authProvider: 'Local'}).save();
+        res.send(user.getUserData());
+    }
+    catch (error) {
+        var duplicateLogin = false;
+        const {errors} = error;
+        var descError = "Error al Crear el usuario. Intente nuevamente";
+        if (errors['username']&& errors['username']['kind'] 
+            && errors['username']['kind'] === 'unique') {
+                duplicateLogin = true;
+        }
+        if (errors['email']&& errors['email']['kind'] 
+        && errors['email']['kind'] === 'unique') {
+            duplicateLogin = true;
+        }
+        if (duplicateLogin){
+            descError = "Username or Email duplicado!"
+         }
+        res.status(400).send(descError);
+    }
 });
 
 //Get all Users
@@ -19,8 +38,8 @@ router.get('/users', async (req,res) => {
 });
 
 //Get current user profile
-router.get('/current_user', requireLogin, (req, res) => {
-    res.send(req.user.getUserData());
+router.get('/current_user', (req, res) => {
+    res.send(req.user && req.user.getUserData());
 });
 
 //Logout current user
@@ -41,13 +60,12 @@ router.get(
     '/google/callback', 
     passport.authenticate('google', { failureRedirect: '/login' } ),
     (req,res) => res.redirect('/')
-)
+);
 
 //Local Login
 router.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/auth/login',
-                                   failureFlash: true })
+    passport.authenticate('local'),
+    (req, res) => res.send(req.user && req.user.getUserData())
 );
 
 module.exports = router;
