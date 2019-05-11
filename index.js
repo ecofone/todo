@@ -36,11 +36,6 @@ require('./server/services/authentication');
 app.use('/auth',authRoutes);
 app.use('/api/todo',todoRoutes);
 
-//To be deleted
-app.get('/', (req,res) => {
-    res.send("Root");
-});
-
 
 //Static Routes
 if (process.env.NODE_ENV === 'production'){
