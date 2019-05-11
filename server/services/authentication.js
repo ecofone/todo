@@ -70,7 +70,7 @@ passport.use(
                         }).save();
                 }
                 return done(null, user);
-            } catch (err) { conssole.log("Google Strategy Error: ", err); return done(err) }
+            } catch (err) { console.log("Google Strategy Error: ", err); return done(err) }
         }   
     )
 );
