@@ -9,7 +9,7 @@ const saltRounds = 10;
 const UserSchema = new Schema({
     googleId: String,
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true},
+    password: String,
     authProvider: String,
     email: { type: String, required: true, unique: true },
     names: { type: String, required: true },
