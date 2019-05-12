@@ -8,7 +8,7 @@ const saltRounds = 10;
 //Schema of the users' collections
 const UserSchema = new Schema({
     googleId: String,
-    username: { type: String, required: true, unique: true },
+    username: { type: String, unique: true },
     password: String,
     authProvider: String,
     email: { type: String, required: true, unique: true },
