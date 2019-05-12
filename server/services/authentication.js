@@ -64,6 +64,7 @@ passport.use(
                     user = await new User({
                         googleId: profile.id,
                         email: profile.emails[0].value,
+                        username: profile.emails[0].value,
                         names: profile.name.givenName,
                         lastName: profile.name.familyName,
                         authProvider: 'Google'
