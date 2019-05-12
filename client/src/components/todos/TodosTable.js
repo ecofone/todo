@@ -288,6 +288,10 @@ class TodosTable extends React.Component {
         return(null);
     };
 
+    if (data.length == 0) {
+      return(<Typography align="center" variant="h5" gutterBottom>Start Creating Todos!</Typography>);
+    }
+
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (

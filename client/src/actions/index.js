@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-import { FETCH_USER, LOGIN, CANCEL_LOGIN, FETCH_TODOS, FETCH_TODOS_ERROR} from './types';
+import { FETCH_USER, LOGIN, CANCEL_LOGIN, FETCH_TODOS, FETCH_TODOS_ERROR, NEW_TODO, NEW_TODO_ERROR} from './types';
 
 //Fetch user data
-export const fetchUser = () => async dispatch =>  
+export const fetchUser = () => async (dispatch,getState) =>  
 {   
+    const state = getState();
+    console.log("FetchUser: ", state); 
     const res = await axios.get('/auth/current_user');
     var logged = true;
 
@@ -97,6 +99,31 @@ export const fetchTodos = () => async dispatch =>
         });
     }
 }
+
+
+//New Todo
+
+//Submit new Todo
+export const submitNewTodo = (todo, history) => async dispatch => 
+{
+    try{
+        const res = await axios.post('/api/todo/create', todo);
+        history.push('/todos');
+        dispatch({ type: NEW_TODO, 
+                payload:{  
+                    todo: res.data, 
+                    messages: [{msgType:"success", desc: "Now Todo Created!"}]
+                    }
+        });
+    } catch (error) {
+        console.log("Error calling API New Todo: ", error);
+        dispatch({type: NEW_TODO_ERROR, 
+            payload:{   
+                    messages: [{msgType:"error", desc: "Error Creating a new Todo. Try Again!" }]
+                    }
+        });
+    }
+};
 
 
 

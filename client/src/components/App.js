@@ -6,19 +6,12 @@ import Header from './Header';
 import Notifications from './utilities/Notifications';
 import NewUser from './NewUser';
 import Todos from './todos/Todos';
+import NewTodo from './todos/NewTodo';
 
 function Landing (){
   return (
     <div>
       Landing Page
-    </div>
-  );
-};
-
-function TodoNew (){
-  return (
-    <div>
-      New Todo
     </div>
   );
 };
@@ -36,7 +29,7 @@ class App extends Component {
               <Header/>
               <Route exact path="/" component={Landing}/>
               <Route exact path="/todos" component={Todos}/>
-              <Route exact path="/todos/new" component={TodoNew}/>
+              <Route exact path="/todos/new" component={NewTodo}/>
               <Route exact path="/users/new" component={NewUser}/>              
               <Notifications/>
             </BrowserRouter>

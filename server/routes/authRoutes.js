@@ -59,7 +59,7 @@ router.get('/google', passport.authenticate('google', {
 router.get(
     '/google/callback', 
     passport.authenticate('google', { failureRedirect: '/login' } ),
-    (req,res) => res.redirect('/')
+    (req,res) => res.redirect('/todos')
 );
 
 //Local Login
