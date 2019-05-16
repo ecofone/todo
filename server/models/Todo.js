@@ -33,8 +33,9 @@ TodoSchema.statics.getAllTodos = function () {
 
 //get All Todos of the user 
 TodoSchema.statics.getAllTodosOfUser = function (user) { 
-    return Todo.find({createdBy: user.id}).populate('createdBy', { email: 1, names: 1, lastName:1 })
-                         .populate('assignedTo', { email: 1, names: 1, lastName:1 });
+    return Todo.find({ $or: [ { createdBy: user.id}, { assignedTo: user.id}]}) 
+                        .populate('createdBy', { email: 1, names: 1, lastName:1 })
+                        .populate('assignedTo', { email: 1, names: 1, lastName:1 });
 };
 
 //Get one TODO populating with Users Data
@@ -50,8 +51,10 @@ TodoSchema.methods.updateFields = function(modifiedTodo){
     this.description = modifiedTodo.description;
     this.dueDate = modifiedTodo.dueDate;
     this.priority = modifiedTodo.priority;
+    this.status = modifiedTodo.status;
     this.assignedTo = modifiedTodo.assignedTo;
-  }
+  };
+
 
 //Associate Schema to the Model (Collection)
 const Todo = mongoose.model('Todo', TodoSchema);

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import NewTodoForm from './NewTodoForm';
+import TodoForm from './TodoForm';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { withRouter } from 'react-router-dom'; 
@@ -8,14 +8,15 @@ import { withRouter } from 'react-router-dom';
 class NewTodo extends Component  {
 
     onSubmitNewTodo = (values) => {
-        console.log("OnSubmitNewtodo: ", values);
+        console.log("On Submit New Todo: ", values);
         this.props.submitNewTodo(values,this.props.history);
     }
 
     render() { 
         return (
             <div>
-                <NewTodoForm onSubmit={this.onSubmitNewTodo}/>
+                <TodoForm onSubmit={this.onSubmitNewTodo} operation='New' 
+                titleForm='Creating a new TODO'/>
             </div>
         )
     }

@@ -7,10 +7,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import * as actions from '../actions';
 import loginGoogleIcon from '../img/sign_with_google.png';
 import { withRouter } from 'react-router-dom'; 
+
 
 
 class Login extends Component {
@@ -119,7 +121,9 @@ class Login extends Component {
                         </Typography>  
                     )
                     } 
-                    <br/><br/><hr/>
+                    <br/><br/><br/>
+                    <Divider/>
+                    <br/>
                     <DialogContentText>
                         or Sign In with your favorite Social Network
                     </DialogContentText>

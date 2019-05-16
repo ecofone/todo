@@ -1,12 +1,15 @@
 import axios from 'axios';
 
-import { FETCH_USER, LOGIN, CANCEL_LOGIN, FETCH_TODOS, FETCH_TODOS_ERROR, NEW_TODO, NEW_TODO_ERROR} from './types';
+import { FETCH_USER, LOGIN, CANCEL_LOGIN, 
+        FETCH_TODOS, FETCH_TODOS_ERROR, 
+        NEW_TODO, NEW_TODO_ERROR,
+        EDIT_TODO, SUBMIT_EDIT_TODO,
+        SUBMIT_EDIT_TODO_ERROR, GET_ALL_USERS } from './types';
 
 //Fetch user data
 export const fetchUser = () => async (dispatch,getState) =>  
 {   
     const state = getState();
-    console.log("FetchUser: ", state); 
     const res = await axios.get('/auth/current_user');
     var logged = true;
 
@@ -18,6 +21,18 @@ export const fetchUser = () => async (dispatch,getState) =>
                         user: {logged, errorLogin: false, data:res.data}
                 }
             });
+}
+
+// Fet all users data
+export const fetchAllUsers = () => async (dispatch,getState) =>  
+{   
+    const {users} = getState();
+    if (!users) {
+        const res = await axios.get('/auth/users');
+        dispatch({  type: GET_ALL_USERS, 
+                    payload: res.data
+                });
+    }
 }
 
 //LOGOUT
@@ -116,10 +131,40 @@ export const submitNewTodo = (todo, history) => async dispatch =>
                     }
         });
     } catch (error) {
-        console.log("Error calling API New Todo: ", error);
         dispatch({type: NEW_TODO_ERROR, 
             payload:{   
                     messages: [{msgType:"error", desc: "Error Creating a new Todo. Try Again!" }]
+                    }
+        });
+    }
+};
+
+//Edit TODO
+export const editTodo = (todo, history) => {
+    history.push('/todos/edit');
+    return {
+        type: EDIT_TODO,
+        payload: todo
+    };
+};
+
+//Submit Edit Todo
+export const submitEditTodo = (todo, history) => async dispatch => 
+{
+    try{
+        const editPath = '/api/todo/edit/'+ todo._id;
+        const res = await axios.post(editPath, todo);
+        history.push('/todos');
+        dispatch({ type: SUBMIT_EDIT_TODO, 
+                payload:{  
+                    todo: res.data, 
+                    messages: [{msgType:"success", desc: "Todo sucessfully Updated !"}]
+                    }
+        });
+    } catch (error) {
+        dispatch({type: SUBMIT_EDIT_TODO_ERROR, 
+            payload:{   
+                    messages: [{msgType:"error", desc: "Error Updating new Todo. Try Again!" }]
                     }
         });
     }

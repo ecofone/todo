@@ -7,6 +7,7 @@ import Notifications from './utilities/Notifications';
 import NewUser from './NewUser';
 import Todos from './todos/Todos';
 import NewTodo from './todos/NewTodo';
+import EditTodo from './todos/EditTodo';
 
 function Landing (){
   return (
@@ -30,7 +31,8 @@ class App extends Component {
               <Route exact path="/" component={Landing}/>
               <Route exact path="/todos" component={Todos}/>
               <Route exact path="/todos/new" component={NewTodo}/>
-              <Route exact path="/users/new" component={NewUser}/>              
+              <Route exact path="/todos/edit" component={EditTodo}/>                          
+              <Route exact path="/users/new" component={NewUser}/>  
               <Notifications/>
             </BrowserRouter>
         );

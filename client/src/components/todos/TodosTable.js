@@ -21,6 +21,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'; 
 
 
 let counter = 0;
@@ -53,6 +55,7 @@ const rows = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'description', numeric: false, disablePadding: false, label: 'Description' },
   { id: 'dueDate', numeric: false, disablePadding: false, label: 'Due Date' },
+  { id: 'createdBy', numeric: false, disablePadding: false, label: 'Created By' },
   { id: 'assignedTo', numeric: false, disablePadding: false, label: 'Assigned To' },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
   { id: 'priority', numeric: false, disablePadding: false, label: 'Priority' },
@@ -241,7 +244,6 @@ class TodosTable extends React.Component {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
-    console.log("Handle Click:", event.target.value, id);
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
@@ -259,9 +261,8 @@ class TodosTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
-  handleClickOnEdit = (event, id) => {
-    console.log("Handle Click Edit: ",id);
-
+  handleClickOnEdit = (event, todo) => {
+    this.props.editTodo(todo, this.props.history);
   };
 
   handleClickOnDelete = (event, id) => {
@@ -294,6 +295,7 @@ class TodosTable extends React.Component {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
+
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length} />
@@ -319,7 +321,7 @@ class TodosTable extends React.Component {
                       tabIndex={-1}
                       key={n._id}
                     >
-                      <TableCell padding='checkbox' onClick={(e) => this.handleClickOnEdit(e, n._id)} >
+                      <TableCell padding='checkbox' onClick={(e) => this.handleClickOnEdit(e, {...n, dueDate: n.dueDate.substring(0, 10)})} >
                         <IconButton aria-label="Edit">
                             <EditIcon />
                         </IconButton>
@@ -334,6 +336,7 @@ class TodosTable extends React.Component {
                       </TableCell>
                       <TableCell align="right">{n.description}</TableCell>
                       <TableCell align="right">{dueDate}</TableCell>
+                      <TableCell align="right">{n.createdBy.lastName}</TableCell>
                       <TableCell align="right">{n.assignedTo.lastName}</TableCell>
                       <TableCell align="right">{n.status}</TableCell>
                       <TableCell align="right">{n.priority}</TableCell>
@@ -375,7 +378,7 @@ TodosTable.propTypes = {
 const mapStateToProps = ({todos}) => ({todos});
 
 
-export default connect (mapStateToProps, actions) (withStyles(styles)(TodosTable));
+export default connect (mapStateToProps, actions) (withStyles(styles)((withRouter(TodosTable))));
 
 
 

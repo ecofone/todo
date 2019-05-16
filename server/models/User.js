@@ -21,7 +21,7 @@ UserSchema.plugin(uniqueValidator);
 //------------------------Statics Methods--------------------
 //Get Info of all Users
 UserSchema.statics.getAllUsers = function(){
-  return User.find().select({username:1, email: 1, names: 1, lastName: 1});
+  return User.find().select({_id: 1, username:1, email: 1, names: 1, lastName: 1});
 };
 
 //------------------------Instance Methods--------------------
@@ -38,7 +38,7 @@ UserSchema.methods.verifyPassword = function(password, callback){
 
 //Get Info of current user
 UserSchema.methods.getUserData = function(){
-  return {username: this.username, email: this.email, names: this.names, lastName: this.lastName};
+  return {_id: this._id, username: this.username, email: this.email, names: this.names, lastName: this.lastName};
 };
 
 UserSchema.pre('save', function(next) {
