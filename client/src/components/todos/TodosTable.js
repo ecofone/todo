@@ -19,6 +19,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import DoneIcon from '@material-ui/icons/Done';
+import DelayedIcon from '@material-ui/icons/AccessTime';
+import OpenIcon from '@material-ui/icons/Work';
+
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { Link } from 'react-router-dom';
@@ -73,6 +77,9 @@ class EnhancedTableHead extends React.Component {
       <TableHead>
         <TableRow>
          <TableCell padding='checkbox'>
+              {' '}
+          </TableCell>
+          <TableCell padding='checkbox'>
               {' '}
           </TableCell>
           <TableCell padding='checkbox'>
@@ -201,6 +208,9 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto',
   },
+  tableCell: {
+    padding: theme.spacing.unit * 0.03,
+  },
 });
 
 class TodosTable extends React.Component {
@@ -220,6 +230,18 @@ class TodosTable extends React.Component {
   componentDidMount() {
     this.props.fetchTodos();
 }
+
+  renderStatusIcon = (status) => {
+    switch (status) {
+      case 'open':
+        return <OpenIcon />
+      case 'delayed':
+        return <DelayedIcon />
+      case 'closed':
+        return <DoneIcon />
+    }
+
+  };
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -266,8 +288,13 @@ class TodosTable extends React.Component {
   };
 
   handleClickOnDelete = (event, id) => {
-    console.log("Handle Click Delete: ",id);
+    this.props.submitDeleteTodo(id, this.props.history);
+  };
 
+  handleClickOnDone = (event, todo) => {
+    if (todo.status !== 'closed') {
+      this.props.submitEditTodo({...todo, status: 'closed'}, this.props.history);
+    }
   };
 
   handleChangePage = (event, page) => {
@@ -295,7 +322,7 @@ class TodosTable extends React.Component {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
-
+    console.log("Render DataTable:", data);
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length} />
@@ -321,12 +348,20 @@ class TodosTable extends React.Component {
                       tabIndex={-1}
                       key={n._id}
                     >
-                      <TableCell padding='checkbox' onClick={(e) => this.handleClickOnEdit(e, {...n, dueDate: n.dueDate.substring(0, 10)})} >
+                      
+                      <TableCell padding='dense' className={classes.tableCell} onClick={(e) => this.handleClickOnDone(e, n)} >
+                       {n.status !== 'closed' &&
+                        <IconButton aria-label="Edit">
+                            <DoneIcon />
+                        </IconButton>
+                       }
+                      </TableCell>
+                      <TableCell padding='dense' className={classes.tableCell} onClick={(e) => this.handleClickOnEdit(e, {...n, dueDate: n.dueDate.substring(0, 10)})} >
                         <IconButton aria-label="Edit">
                             <EditIcon />
                         </IconButton>
                       </TableCell>
-                      <TableCell padding='checkbox' onClick={(e) => this.handleClickOnDelete(e, n._id)}>
+                      <TableCell padding='dense' className={classes.tableCell} onClick={(e) => this.handleClickOnDelete(e, n._id)}>
                         <IconButton aria-label="Delete">
                             <DeleteIcon />
                         </IconButton>
@@ -338,7 +373,7 @@ class TodosTable extends React.Component {
                       <TableCell align="right">{dueDate}</TableCell>
                       <TableCell align="right">{n.createdBy.lastName}</TableCell>
                       <TableCell align="right">{n.assignedTo.lastName}</TableCell>
-                      <TableCell align="right">{n.status}</TableCell>
+                      <TableCell align="right">{this.renderStatusIcon(n.status)}</TableCell>
                       <TableCell align="right">{n.priority}</TableCell>
                     </TableRow>
                   );

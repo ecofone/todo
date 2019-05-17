@@ -46,6 +46,7 @@ router.post('/edit/:todoID', requireLogin, async (req,res) => {
         if (todo){
             todo.updateFields(req.body);
             todo = await todo.save()
+            todo = await Todo.getTodo(req.params.todoID);
             res.send(todo);
         }
         else {

@@ -9,7 +9,7 @@ class Notifications extends Component {
     renderMessages(){
         const {messages} = this.props;
         const output = messages && messages.map((msg, index) => 
-                        <Messages key={index} msgType={msg.msgType} message={msg.desc}/>);
+                        <Messages key={Math.random()} open={true} msgType={msg.msgType} message={msg.desc}/>);
         return output;
     }
 

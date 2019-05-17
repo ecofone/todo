@@ -1,4 +1,4 @@
-import { FETCH_TODOS, NEW_TODO, SUBMIT_EDIT_TODO } from '../actions/types';
+import { FETCH_TODOS, NEW_TODO, SUBMIT_EDIT_TODO, DELETE_TODO } from '../actions/types';
 
 
 export default function (state = null, action) {
@@ -12,6 +12,8 @@ export default function (state = null, action) {
                 ...state.filter(todo => todo._id !== action.payload.todo._id),
                 action.payload.todo
             ]
+        case DELETE_TODO:
+        return state.filter(todo => todo._id !== action.payload.idTodo);
         default:
             return state;
     }

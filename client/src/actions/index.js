@@ -4,7 +4,8 @@ import { FETCH_USER, LOGIN, CANCEL_LOGIN,
         FETCH_TODOS, FETCH_TODOS_ERROR, 
         NEW_TODO, NEW_TODO_ERROR,
         EDIT_TODO, SUBMIT_EDIT_TODO,
-        SUBMIT_EDIT_TODO_ERROR, GET_ALL_USERS } from './types';
+        SUBMIT_EDIT_TODO_ERROR, GET_ALL_USERS,
+        DELETE_TODO, DELETE_TODO_ERROR } from './types';
 
 //Fetch user data
 export const fetchUser = () => async (dispatch,getState) =>  
@@ -109,7 +110,7 @@ export const fetchTodos = () => async dispatch =>
     } catch (error) {
         dispatch({type: FETCH_TODOS_ERROR, 
             payload:{   
-                    messages: [{msgType:"error", desc: error.response.data}]
+                    messages: [{msgType:"error", desc: 'Error Getting TODOS'}]
                     }
         });
     }
@@ -165,6 +166,28 @@ export const submitEditTodo = (todo, history) => async dispatch =>
         dispatch({type: SUBMIT_EDIT_TODO_ERROR, 
             payload:{   
                     messages: [{msgType:"error", desc: "Error Updating new Todo. Try Again!" }]
+                    }
+        });
+    }
+};
+
+//Submit Edit Todo
+export const submitDeleteTodo = (idTodo, history) => async dispatch => 
+{
+    try{
+        const editPath = '/api/todo/delete/'+ idTodo;
+        const res = await axios.delete(editPath);
+        history.push('/todos');
+        dispatch({ type: DELETE_TODO, 
+                payload:{  
+                    idTodo, 
+                    messages: [{msgType:"success", desc: "Todo sucessfully Deleted!"}]
+                    }
+        });
+    } catch (error) {
+        dispatch({type: DELETE_TODO_ERROR, 
+            payload:{   
+                    messages: [{msgType:"error", desc: "Error when Deleting the Todo. Try Again!" }]
                     }
         });
     }

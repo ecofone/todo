@@ -9,3 +9,5 @@ export const EDIT_TODO = 'edit_todo';
 export const SUBMIT_EDIT_TODO = 'submit_edit_todo';
 export const SUBMIT_EDIT_TODO_ERROR = 'submit_edit_todo_error';
 export const GET_ALL_USERS = 'get_all_users';
+export const DELETE_TODO = 'delete_todo';
+export const DELETE_TODO_ERROR = 'delete_todo_error';

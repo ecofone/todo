@@ -8,12 +8,10 @@ import { withRouter } from 'react-router-dom';
 class EditTodo extends Component  {
 
     onSubmitEditTodo = (values) => {
-        console.log("On Submit Edit Todo: ", values);
         this.props.submitEditTodo(values,this.props.history);
     }
 
     render() { 
-        console.log("Render Edit Todo: ", this.props.currentTodo);
         if (this.props.currentTodo){
             const currentTodo = this.props.currentTodo;
             currentTodo.assignedTo = this.props.currentTodo.assignedTo._id;

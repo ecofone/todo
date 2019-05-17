@@ -98,9 +98,14 @@ function MySnackbarContent(props) {
 //Messages Component using the SnackBar Wrapper
 
 class Messages extends React.Component {
-  state = {
-    open: true,
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: props.open
+    };
   };
+
 
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {

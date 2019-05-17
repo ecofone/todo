@@ -8,7 +8,6 @@ import { withRouter } from 'react-router-dom';
 class NewTodo extends Component  {
 
     onSubmitNewTodo = (values) => {
-        console.log("On Submit New Todo: ", values);
         this.props.submitNewTodo(values,this.props.history);
     }
 
